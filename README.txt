@@ -3,6 +3,7 @@
 Upload all files in this folder together to GitHub Pages or another static hosting provider.
 Open index.html through a web server, not file://.
 Keep model.glb next to index.html.
+The viewer includes an on-screen Controls panel explaining rotate, pan, zoom, and reset view.
 
 Local test:
 1. Open a terminal in this folder.

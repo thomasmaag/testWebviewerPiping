@@ -4,6 +4,10 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const container = document.getElementById('viewer');
 const status = document.getElementById('status');
+const controlsPanel = document.getElementById('controls-panel');
+const controlsToggle = document.getElementById('controls-toggle');
+const resetViewButton = document.getElementById('reset-view');
+let modelRoot = null;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf4f6f8);
@@ -92,6 +96,22 @@ function hideStatus() {
     status.classList.add('hidden');
 }
 
+function setControlsCollapsed(isCollapsed) {
+    controlsPanel.classList.toggle('collapsed', isCollapsed);
+    controlsToggle.textContent = isCollapsed ? 'Show' : 'Hide';
+    controlsToggle.setAttribute('aria-expanded', String(!isCollapsed));
+}
+
+controlsToggle.addEventListener('click', () => {
+    setControlsCollapsed(!controlsPanel.classList.contains('collapsed'));
+});
+
+resetViewButton.addEventListener('click', () => {
+    if (modelRoot) {
+        fitCameraToObject(modelRoot);
+    }
+});
+
 resizeRenderer();
 window.addEventListener('resize', resizeRenderer);
 
@@ -99,6 +119,7 @@ const loader = new GLTFLoader();
 loader.load(
     './model.glb',
     (gltf) => {
+        modelRoot = gltf.scene;
         scene.add(gltf.scene);
         fitCameraToObject(gltf.scene);
         hideStatus();
