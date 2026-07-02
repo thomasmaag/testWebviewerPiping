@@ -21,6 +21,11 @@
             height: 100%;
         }
 
+        body.measure-active #viewer,
+        body.measure-active canvas {
+            cursor: crosshair;
+        }
+
         #controls-panel {
             position: fixed;
             top: 12px;
@@ -55,7 +60,9 @@
         }
 
         #controls-toggle,
-        #reset-view {
+        #reset-view,
+        #measure-toggle,
+        #measure-result-close {
             border: 1px solid rgba(23, 32, 42, 0.22);
             border-radius: 4px;
             background: rgba(255, 255, 255, 0.88);
@@ -85,15 +92,86 @@
             margin: 3px 0;
         }
 
-        #reset-view {
+        .controls-actions {
+            display: grid;
+            gap: 6px;
+        }
+
+        #reset-view,
+        #measure-toggle {
             width: 100%;
             padding: 6px 8px;
             font-weight: 600;
         }
 
+        #measure-toggle.active {
+            border-color: rgba(25, 111, 61, 0.65);
+            background: #196f3d;
+            color: #ffffff;
+        }
+
         #controls-toggle:hover,
-        #reset-view:hover {
+        #reset-view:hover,
+        #measure-toggle:hover,
+        #measure-result-close:hover {
             background: #ffffff;
+        }
+
+        #measure-toggle.active:hover {
+            background: #145a32;
+        }
+
+        #measure-result {
+            position: fixed;
+            right: 12px;
+            bottom: 12px;
+            width: 245px;
+            max-width: calc(100vw - 24px);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.2);
+            color: #17202a;
+            font-size: 13px;
+            line-height: 1.35;
+            z-index: 4;
+        }
+
+        #measure-result.hidden {
+            display: none;
+        }
+
+        .measure-result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 8px 9px;
+            border-bottom: 1px solid rgba(23, 32, 42, 0.12);
+        }
+
+        .measure-result-title {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        #measure-result-close {
+            padding: 3px 7px;
+        }
+
+        .measure-result-body {
+            display: grid;
+            gap: 5px;
+            padding: 9px 10px 10px;
+        }
+
+        .measure-result-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .measure-result-row span:last-child {
+            font-weight: 700;
         }
 
         #status {
@@ -134,8 +212,24 @@
                 <li>Right mouse drag: Pan</li>
                 <li>Mouse wheel: Zoom</li>
                 <li>Reset View button: Fit model to view</li>
+                <li>Measure button: Pick two model points</li>
             </ul>
-            <button id="reset-view" type="button">Reset View</button>
+            <div class="controls-actions">
+                <button id="reset-view" type="button">Reset View</button>
+                <button id="measure-toggle" type="button">Measure</button>
+            </div>
+        </div>
+    </div>
+    <div id="measure-result" class="hidden" aria-label="Measurement result">
+        <div class="measure-result-header">
+            <div class="measure-result-title">Measurement</div>
+            <button id="measure-result-close" type="button">Close</button>
+        </div>
+        <div class="measure-result-body">
+            <div class="measure-result-row"><span>Distance</span><span id="measure-distance">-</span></div>
+            <div class="measure-result-row"><span>&Delta;X</span><span id="measure-delta-x">-</span></div>
+            <div class="measure-result-row"><span>&Delta;Y</span><span id="measure-delta-y">-</span></div>
+            <div class="measure-result-row"><span>&Delta;Z</span><span id="measure-delta-z">-</span></div>
         </div>
     </div>
     <div id="status">Loading model.glb...</div>
